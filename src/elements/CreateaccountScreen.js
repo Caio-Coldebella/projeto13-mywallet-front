@@ -1,10 +1,11 @@
 import styles from "../styles";
 import axios from "axios";
 import logo from "../assets/MyWallet.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function CreateaccountScreen(){
+    const navigate = useNavigate();
     const [name,setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -22,10 +23,15 @@ export default function CreateaccountScreen(){
             email: email,
             password: password
         };
-        const promisse = axios.post("https://localhost:5000/sign-up",objpost);
-        //Salvar token e direcionar para tela inicial
-        //promisse.then(res => {setUser.setUser(res.data); navigate("/hoje")})
-        promisse.catch(()=> {setDisable(false);alert("Nome de usuário e/ou email já utilizado");});
+        const promisse = axios.post("http://localhost:5000/sign-up",objpost);
+        promisse.then(() => {navigate("/");})
+        promisse.catch((res)=> {
+            if(res.response.status === 400){
+                alert("Email inválido");
+            }else if(res.response.status === 401){
+                alert("Nome de usuário e/ou email já utilizado");
+            }
+            setDisable(false);});
     }
     return(
         <>
