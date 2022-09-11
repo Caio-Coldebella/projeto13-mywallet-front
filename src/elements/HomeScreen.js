@@ -34,6 +34,10 @@ export default function HomeScreen(){
             </TOP>
             <REGISTERBOX>
                 {userdata.transactions?userdata.transactions.map((item,index) =>{return <Transaction key={index} name={item.name} date={item.date} value={item.value}/>}):null}
+                <TOTAL>
+                    <p>SALDO</p>
+                   {userdata.total>=0?<POS>{String(userdata.total)}</POS>:<NEG>{String(userdata.total*-1)}</NEG>}    
+                </TOTAL>
             </REGISTERBOX>
             <BOTTON>
                 <BOTTONBOX onClick={()=>{navigate('/home/new-earn')}}>
@@ -84,9 +88,35 @@ const REGISTERBOX = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    overflow-y: scroll;
     height: calc(100% - 225px);
     width: 100%;
+    padding-bottom: 25px;
     border-radius: 5px;
     background-color: #FFFFFF;
+    overflow-y: scroll;
+`;
+const TOTAL = styled.div`
+    position: fixed;
+    bottom: 145px;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: calc(100% - 50px);
+    height: 25px;
+    border-radius: 5px;
+    padding: 0 5px 5px 10px;
+    background-color: #FFFFFF;
+    font-size: 17px;
+    font-weight: bold;
+`;
+const POS = styled.p`
+    color: #03AC00;
+    font-weight: 400;
+    margin-right: 10px;
+`;
+const NEG = styled.p`
+    color: #c70000;
+    font-weight: 400;
+    margin-right: 10px;
 `;

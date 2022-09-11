@@ -21,8 +21,10 @@ const BOX = styled.div`
     justify-content: space-between;
     align-items: center;
     height: 35px;
+    border: 1px solid #FFFFFF;
     width: 100%;
     font-size: 16px;
+    margin: 5px 0 15px 0;
 `;
 const NAME = styled.p`
     color: #000000;

@@ -31,6 +31,8 @@ export default function NewearnScreen(){
         promisse.catch((res)=> {
             if(res.response.status === 400){
                 alert("Preencha os campos valor e descrição");
+            }else if(res.response.status === 500){
+                navigate('/');
             }
             setDisable(false);});
     }
