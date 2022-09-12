@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TokenContext from "../contexts/TokenContext";
-import { DashCircle,PlusCircle,BoxArrowRight } from 'react-bootstrap-icons';
+import { DashCircle,PlusCircle,BoxArrowRight} from 'react-bootstrap-icons';
 import axios from "axios";
 import Transaction from "./Transaction";
 
@@ -11,6 +11,7 @@ export default function HomeScreen(){
     const tk = useContext(TokenContext);
     const navigate = useNavigate();
     const [userdata, setUserdata] = useState({});
+    const [empty,setEmpty] = useState(true);
     useEffect(()=>{
         setInterval(()=>{
             axios.post("http://localhost:5000/status",{token: tk.token});
@@ -20,11 +21,14 @@ export default function HomeScreen(){
         const promisse = axios.get("http://localhost:5000/home",{headers:{Authentication:tk.token}});
         promisse.then(res=>{
             setUserdata(res.data);
+            if(res.data.transactions.length > 0){
+                setEmpty(false);
+            }
         });
         promisse.catch(()=>{
             navigate('/');
         });
-    },[]);
+    },[navigate,tk.token]);
     return(
         <>
         <styles.BACKGROUND>
@@ -33,8 +37,9 @@ export default function HomeScreen(){
                 <BoxArrowRight size={25} color="#FFFFFF"/>
             </TOP>
             <REGISTERBOX>
-                {userdata.transactions?userdata.transactions.map((item,index) =>{return <Transaction key={index} name={item.name} date={item.date} value={item.value}/>}):null}
-                <TOTAL>
+                {userdata.transactions?(userdata.transactions.length>0?userdata.transactions.map((item,index) =>{return <Transaction key={index} name={item.name} date={item.date} value={item.value}/>}):
+                <EMPTY>Não há registros de entrada ou saída</EMPTY>):null}
+                <TOTAL empty={empty}>
                     <p>SALDO</p>
                    {userdata.total>=0?<POS>{String(userdata.total)}</POS>:<NEG>{String(userdata.total*-1)}</NEG>}    
                 </TOTAL>
@@ -99,7 +104,12 @@ const TOTAL = styled.div`
     position: fixed;
     bottom: 145px;
     z-index: 1;
-    display: flex;
+    display: ${props =>{
+        if(props.empty){
+            return "none";
+        }
+        return "flex";
+    }};
     justify-content: space-between;
     align-items: flex-start;
     width: calc(100% - 50px);
@@ -119,4 +129,10 @@ const NEG = styled.p`
     color: #c70000;
     font-weight: 400;
     margin-right: 10px;
+`;
+const EMPTY = styled.p`
+    text-align: center;
+    margin: auto 20% auto 20%;
+    color: #868686;
+    font-size: 20px;
 `;

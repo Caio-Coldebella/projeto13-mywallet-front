@@ -58,13 +58,24 @@ const LINK = styled.p`
         cursor: pointer;
     }
 `;
-
+const TOP = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 80px;
+    margin-bottom: 20px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #FFFFFF;
+`;
 const styles = {
     BACKGROUND: BACKGROUND,
     LOGO: LOGO,
     FORM: FORM,
     INPUT: INPUT,
     BUTTON: BUTTON,
-    LINK: LINK
+    LINK: LINK,
+    TOP: TOP
 }
 export default styles;
